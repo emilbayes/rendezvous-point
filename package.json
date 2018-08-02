@@ -1,0 +1,33 @@
+{
+  "name": "rendezvous-point",
+  "version": "0.0.0",
+  "description": "Rendezvous points on the DHT where two authenticated peers can leave data",
+  "main": "index.js",
+  "dependencies": {
+    "ed25519-supercop": "^1.2.0",
+    "nanoassert": "^1.1.0",
+    "sodium-native": "^2.1.6"
+  },
+  "devDependencies": {
+    "bittorrent-dht": "^8.4.0"
+  },
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emilbayes/rendezvous-point.git"
+  },
+  "keywords": [
+    "dht",
+    "bittorrent",
+    "mutable",
+    "bep 44"
+  ],
+  "author": "Emil Bay <github@tixz.dk>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emilbayes/rendezvous-point/issues"
+  },
+  "homepage": "https://github.com/emilbayes/rendezvous-point#readme"
+}
