@@ -12,7 +12,7 @@
     "bittorrent-dht": "^8.4.0"
   },
   "scripts": {
-    "test": "tape test.js"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
