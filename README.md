@@ -1,5 +1,7 @@
 # `rendezvous-point`
 
+[![Build Status](https://travis-ci.org/emilbayes/rendezvous-point.svg?branch=master)](https://travis-ci.org/emilbayes/rendezvous-point)
+
 > Rendezvous points on the DHT where two authenticated peers can leave data
 
 Data could be eg. a `ip:port` pair
