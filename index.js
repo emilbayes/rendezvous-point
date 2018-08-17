@@ -1,5 +1,4 @@
 var sodium = require('sodium-native')
-var ed = require('ed25519-supercop')
 var crypto = require('crypto')
 var assert = require('nanoassert')
 
@@ -23,20 +22,24 @@ Rendezvous.prototype.write = function (remoteKey, message, cb) {
 
   sodium.crypto_kx_server_session_keys(
     rendevousPoint,
-    Buffer.alloc(sodium.crypto_kx_SESSIONKEYBYTES),
+    null,
     self.keypair.publicKey,
     self.keypair.secretKey,
     remoteKey
   )
 
-  var discoveryKeypair = ed.createKeyPair(rendevousPoint)
+  var discoveryPk = Buffer.alloc(sodium.crypto_sign_PUBLICKEYBYTES)
+  var discoverySk = sodium.sodium_malloc(sodium.crypto_sign_SECRETKEYBYTES)
+  sodium.crypto_sign_seed_keypair(discoveryPk, discoverySk, rendevousPoint)
 
   self.dht.put({
     v: message,
-    k: discoveryKeypair.publicKey,
+    k: discoveryPk,
     seq: 0,
     sign: function (buf) {
-      return ed.sign(buf, discoveryKeypair.publicKey, discoveryKeypair.secretKey)
+      var sig = Buffer.alloc(sodium.crypto_sign_BYTES)
+      sodium.crypto_sign_detached(sig, buf, discoverySk)
+      return sig
     }
   }, cb)
 }
@@ -48,18 +51,20 @@ Rendezvous.prototype.read = function (remoteKey, cb) {
   var rendevousPoint = Buffer.allocUnsafe(sodium.crypto_kx_SESSIONKEYBYTES)
 
   sodium.crypto_kx_client_session_keys(
-    Buffer.alloc(sodium.crypto_kx_SESSIONKEYBYTES),
+    null,
     rendevousPoint,
     self.keypair.publicKey,
     self.keypair.secretKey,
     remoteKey
   )
 
-  var discoveryKeypair = ed.createKeyPair(rendevousPoint)
-  var hash = crypto.createHash('sha1').update(discoveryKeypair.publicKey).digest()
+  var discoveryPk = Buffer.alloc(sodium.crypto_sign_PUBLICKEYBYTES)
+  var discoverySk = sodium.sodium_malloc(sodium.crypto_sign_SECRETKEYBYTES)
+  sodium.crypto_sign_seed_keypair(discoveryPk, discoverySk, rendevousPoint)
+  var hash = crypto.createHash('sha1').update(discoveryPk).digest()
 
   self.dht.get(hash, {
-    verify: ed.verify,
+    verify: sodium.crypto_sign_verify_detached,
     cache: false
   }, cb)
 }

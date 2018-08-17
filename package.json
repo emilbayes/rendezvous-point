@@ -4,9 +4,8 @@
   "description": "Rendezvous points on the DHT where two authenticated peers can leave data",
   "main": "index.js",
   "dependencies": {
-    "ed25519-supercop": "^1.2.0",
     "nanoassert": "^1.1.0",
-    "sodium-native": "^2.1.6"
+    "sodium-native": "^2.2.1"
   },
   "devDependencies": {
     "bittorrent-dht": "^8.4.0"
