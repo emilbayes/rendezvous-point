@@ -6,13 +6,13 @@ var assert = require('nanoassert')
 
 var dht = new DHT()
 
-var keyA = keygen()
-var keyB = keygen()
+dht.listen(20000, function loop () {
+  var keyA = keygen()
+  var keyB = keygen()
 
-var peerA = new Rendezvous(dht, keyA)
-var peerB = new Rendezvous(dht, keyB)
+  var peerA = new Rendezvous(dht, keyA)
+  var peerB = new Rendezvous(dht, keyB)
 
-dht.listen(20000, function () {
   peerA.write(keyB.publicKey, Buffer.from('Hello world!'), function (err, hash) {
     if (err) throw err
 
